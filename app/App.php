@@ -47,9 +47,11 @@ class App
                 $vars = $routeInfo[2];
                 // ... call $handler with $vars
                 [$controller, $method] = $handler;
-                $response = ($controller)->{$method}(...array_values($vars));
+
+                $response = (new $controller())->{$method}(...array_values($vars));
                 switch (true) {
                     case $response instanceof ViewResponse:
+
                         echo $twig->render($response->getViewName().'.twig', $response->getData());
                         break;
                     case $response instanceof RedirectResponse:

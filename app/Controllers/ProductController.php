@@ -13,7 +13,7 @@ class ProductController
     {
         return new ViewResponse(
             'index',
-            ['product' => ['name' => $_ENV['TEST']]]
+            ['products' => ['name' => $_ENV['TEST']]]
         );
     }
 }
