@@ -8,6 +8,8 @@ class App
 {
     public function run(): void
     {
-        echo 'Hello, World!' . PHP_EOL;
+        $config = new Configuration();
+        $config->prepareSecrets();
+        echo $_ENV['TEST'].PHP_EOL;
     }
 }
