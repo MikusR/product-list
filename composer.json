@@ -1,15 +1,19 @@
 {
-    "name": "scandiweb/junior-developer-test-task",
-    "autoload": {
-        "psr-4": {
-            "App\\": "app/"
-        }
-    },
-    "authors": [
-        {
-            "name": "MikusR",
-            "email": "mikus.rakis@gmail.com"
-        }
-    ],
-    "require": {}
+  "name": "scandiweb/junior-developer-test-task",
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "authors": [
+    {
+      "name": "MikusR",
+      "email": "mikus.rakis@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "require-dev": {
+  }
 }
