@@ -45,9 +45,9 @@ class App
             case FastRoute\Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
-                // ... call $handler with $vars
+                //split handler into controller and method
                 [$controller, $method] = $handler;
-
+                //
                 $response = (new $controller())->{$method}(...array_values($vars));
                 switch (true) {
                     case $response instanceof ViewResponse:
