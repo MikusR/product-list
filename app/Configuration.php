@@ -6,6 +6,7 @@ namespace App;
 
 use Dotenv\Dotenv;
 
+
 class Configuration
 {
     public function prepareSecrets()
@@ -13,4 +14,6 @@ class Configuration
         $dotenv = Dotenv::createImmutable(__DIR__.'/../');
         $dotenv->safeLoad();
     }
+
+
 }
