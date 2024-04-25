@@ -18,6 +18,7 @@ class App
 
         $loader = new FilesystemLoader(__DIR__.'/../resources/views/');
         $twig = new Environment($loader, ['debug' => true,]);
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
             $r->addRoute('GET', '/', [ProductController::class, 'index']);

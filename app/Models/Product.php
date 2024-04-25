@@ -9,14 +9,14 @@ class Product
     private string $sku;
     private string $name;
     private int $price;
-    private array $atribute;
+    private array $atributes;
 
-    public function __construct(string $sku, string $name, int $price, array $atribute)
+    public function __construct(string $sku, string $name, int $price, array $atributes)
     {
         $this->sku = $sku;
         $this->name = $name;
         $this->price = $price;
-        $this->atribute = $atribute;
+        $this->atributes = $atributes;
     }
 
     public function getSku(): string
@@ -34,8 +34,8 @@ class Product
         return $this->price;
     }
 
-    public function getAtribute(): array
+    public function getAtributes(): array
     {
-        return $this->atribute;
+        return $this->atributes;
     }
 }
