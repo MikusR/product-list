@@ -56,21 +56,21 @@ class ProductController
             $products->addColumn('atributesSerialized', 'text');
             $schema->createTable($products);
         }
-//        $this->save(new Product('123', 'Product 1', 100, [['name' => 'color', 'value' => 'red']]));
-//        $this->save(new Product('456', 'Product 2', 200, [['name' => 'color', 'value' => 'blue']]));
-//        $this->save(
-//            new Product(
-//                '789', 'Product 3', 300,
-//                [
-//                    ['name' => 'weight', 'value' => '10kg'],
-//                    ['name' => 'height', 'value' => '10cm']
-//                ]
-//            )
-//        );
-//        $this->save(new Product('012', 'Product 4', 400, [
-//            ['name' => 'weight', 'value' => '20kg'],
-//            ['name' => 'height', 'value' => '20cm']
-//        ]));
+        $this->save(new Product('123', 'Product 1', 100, [['name' => 'color', 'value' => 'red']]));
+        $this->save(new Product('456', 'Product 2', 200, [['name' => 'color', 'value' => 'blue']]));
+        $this->save(
+            new Product(
+                '789', 'Product 3', 300,
+                [
+                    ['name' => 'weight', 'value' => '10kg'],
+                    ['name' => 'height', 'value' => '10cm']
+                ]
+            )
+        );
+        $this->save(new Product('012', 'Product 4', 400, [
+            ['name' => 'weight', 'value' => '20kg'],
+            ['name' => 'height', 'value' => '20cm']
+        ]));
     }
 
     public function index(): Response

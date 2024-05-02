@@ -15,4 +15,8 @@ class Helper
         echo '<pre>';
         var_dump($value);
     }
+
+    public function seed()
+    {
+    }
 }
