@@ -13,6 +13,12 @@ class App
 {
     public function run(): void
     {
+        session_start();
+
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = md5(uniqid(random_bytes(3), true));
+        }
+
         $config = new Configuration();
         $config->prepareSecrets();
 
@@ -20,10 +26,13 @@ class App
         $twig = new Environment($loader, ['debug' => true,]);
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
+        $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
+
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
             $r->addRoute('GET', '/info', [Helper::class, 'info']);
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'addProduct']);
+            $r->addRoute('POST', '/', [ProductController::class, 'save']);
         });
 
         // Fetch method and URI from somewhere
