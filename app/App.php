@@ -21,7 +21,9 @@ class App
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+            $r->addRoute('GET', '/info', [Helper::class, 'info']);
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
+            $r->addRoute('GET', '/add-product', [ProductController::class, 'addProduct']);
         });
 
         // Fetch method and URI from somewhere

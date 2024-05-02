@@ -8,17 +8,25 @@
     <title>Products</title>
 </head>
 <body>
+<a href="/add-product">
+    <button>ADD</button>
+</a>
+
+<button>MASS DELETE</button>
 
 {% for product in products %}
 
-    <div>
+
+
+    <div style="border: 1px solid aqua">
+        <input type="checkbox" class="delete-checkbox)">
         <p>SKU: {{ product.sku }}</p>
         <h3>name: {{ product.name }}</h3>
         <p>price: {{ product.price }}</p>
 
         {% for atribute in product.atributes %}
             <p>{{ atribute.name }}: {{ atribute.value }}</p>
-            
+
         {% endfor %}
 
         <br/>
