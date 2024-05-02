@@ -32,7 +32,7 @@ class App
             $r->addRoute('GET', '/info', [Helper::class, 'info']);
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'addProduct']);
-            $r->addRoute('POST', '/', [ProductController::class, 'save']);
+            $r->addRoute('POST', '/', [ProductController::class, 'add']);
         });
 
         // Fetch method and URI from somewhere

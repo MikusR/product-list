@@ -7,6 +7,7 @@ namespace App\Controllers;
 use App\Helper;
 use App\Models\Product;
 use App\Models\ProductCollection;
+use App\RedirectResponse;
 use App\Response;
 use App\ViewResponse;
 use Doctrine\DBAL\Connection;
@@ -127,6 +128,28 @@ class ProductController
         return new ViewResponse('addProduct', [
             'types' => $this->getProductTypes()
         ]);
+    }
+
+    public function add(): Response
+    {
+//        Helper::dump($_POST);
+        $atributes = [
+            ['productType' => $_POST['productType']],
+            ['name' => 'size', 'value' => $_POST['size']],
+            ['name' => 'weight', 'value' => $_POST['weight']],
+            ['name' => 'height', 'value' => $_POST['height']],
+            ['name' => 'width', 'value' => $_POST['width']],
+            ['name' => 'length', 'value' => $_POST['length']]
+        ];
+        $product = new Product(
+            $_POST['sku'],
+            $_POST['name'],
+            (int)$_POST['price'],
+            $atributes
+        );
+        $this->save($product);
+        Helper::dump($product);
+        return new RedirectResponse('/');
     }
 
     public function getProductTypes(): array
