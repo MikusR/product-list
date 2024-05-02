@@ -52,6 +52,7 @@ class ProductController
             $products->addUniqueIndex(['sku']);
             $products->addColumn('name', 'string', ['length' => 255]);
             $products->addColumn('price', 'integer');
+//            $products->addColumn('type', 'string', ['length' => 255]);
             $products->addColumn('atributesJson', 'json');
             $products->addColumn('atributesSerialized', 'text');
             $schema->createTable($products);
@@ -119,5 +120,22 @@ class ProductController
                 'atributesSerialized' => serialize($product->getAtributes()),
             ])
             ->executeQuery();
+    }
+
+    public function addProduct(): response
+    {
+        return new ViewResponse('addProduct', [
+            'types' => $this->getProductTypes()
+        ]);
+    }
+
+    public function getProductTypes(): array
+    {
+        $types = [
+            'DVD' => ['name' => 'dvd', 'atributes' => ['size']],
+            'Book' => ['name' => 'book', 'atributes' => ['weight']],
+            'Furniture' => ['name' => 'furniture', 'atributes' => ['height', 'width', 'length']]
+        ];
+        return $types;
     }
 }

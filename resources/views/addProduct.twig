@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>add product</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<form action="/add-product" method="post" id="product_form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <input type="text" name="sku" placeholder="sku" id="sku">
+    <input type="text" name="name" placeholder="name" id="name">
+    <input type="number" name="price" placeholder="price" id="price">
+    <select name="productType" id="productType" onchange="">
+        <option selected="selected" value="dvd">DVD</option>
+        <option value="book">Book</option>
+        <option value="furniture">Furniture</option>
+    </select>
+    {% for type in types %}
+        <fieldset id="{{ type.name }}" {% if not loop.first %} class="hidden" {% endif %}>
+
+            {% for atribute in type.atributes %}
+                <label for="{{ atribute }}">{{ atribute }}:</label>
+                <input type="text" id="{{ atribute }}" name="{{ atribute }}">
+            {% endfor %}
+        </fieldset>
+    {% endfor %}
+    <button type="submit">Save</button>
+    <button>Cancel</button>
+</form>
+<script>
+    document.getElementById('productType').addEventListener('change', function () {
+        let type = this.value;
+        document.querySelectorAll('fieldset').forEach(function (element) {
+            element.classList.add('hidden');
+        })
+        document.getElementById(type).classList.remove('hidden');
+    })
+</script>
+</body>
+</html>
