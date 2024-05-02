@@ -17,13 +17,12 @@
 {% for product in products %}
 
 
-
     <div style="border: 1px solid aqua">
         <input type="checkbox" class="delete-checkbox)">
         <p>SKU: {{ product.sku }}</p>
         <h3>name: {{ product.name }}</h3>
         <p>price: {{ product.price }}</p>
-
+        <p>type: {{ product.atributes.productType }}</p>
         {% for atribute in product.atributes %}
             <p>{{ atribute.name }}: {{ atribute.value }}</p>
 

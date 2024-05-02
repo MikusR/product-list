@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-<form action="/add-product" method="post" id="product_form">
+<form action="/" method="POST" id="product_form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
     <input type="text" name="sku" placeholder="sku" id="sku">
     <input type="text" name="name" placeholder="name" id="name">
