@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helper;
 use App\Models\Product;
 use App\Models\ProductCollection;
 use App\RedirectResponse;
@@ -148,7 +147,7 @@ class ProductController
             $atributes
         );
         $this->save($product);
-        Helper::dump($product);
+        \App\Helper::dd($product);
         return new RedirectResponse('/');
     }
 
