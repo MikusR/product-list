@@ -139,12 +139,13 @@ class ProductController
     {
         $list = json_decode(file_get_contents("php://input"));
         try {
-            $builder = $this->database->createQueryBuilder()
-                ->delete('products')
-                ->where('sku in (:list)')
-                ->setParameter('list', $list, [\Doctrine\DBAL\ArrayParameterType::STRING]);
-
-            $builder->executeQuery();
+            foreach ($list as $sku) {
+                $builder = $this->database->createQueryBuilder()
+                    ->delete('products')
+                    ->where('sku = :sku')
+                    ->setParameter('sku', $sku);
+                $builder->executeQuery();
+            }
         } catch (Exception $e) {
             \App\Helper::dump($e->getMessage());
         }

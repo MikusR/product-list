@@ -21,12 +21,18 @@ class Helper
         die;
     }
 
+    public static function dump($value)
+    {
+        echo '<pre>';
+        var_dump($value);
+    }
+
     public static function test()
     {
     }
 
 }
 
-foreach ($argv as $arg) {
-    method_exists(Helper::class, $arg) and call_user_func([Helper::class, $arg]);
-}
+//foreach ($argv as $arg) {
+//    method_exists(Helper::class, $arg) and call_user_func([Helper::class, $arg]);
+//}
