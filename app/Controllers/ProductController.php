@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\JsonResponse;
 use App\Models\Product;
 use App\Models\ProductCollection;
 use App\RedirectResponse;
@@ -55,7 +56,7 @@ class ProductController
                 ->fetchAllAssociative();
         } catch (Exception $e) {
             $productsList = [];
-            echo $e->getMessage();
+            \App\Helper::dump($e->getMessage());
         }
 
         foreach ($productsList as $product) {
@@ -101,7 +102,7 @@ class ProductController
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
-            echo $e->getMessage();
+            \App\Helper::dump($e->getMessage());
         }
     }
 
@@ -114,7 +115,6 @@ class ProductController
 
     public function add(): Response
     {
-//        Helper::dump($_POST);
         $atributes = [
             ['productType' => $_POST['productType']],
             ['name' => 'size', 'value' => $_POST['size']],
@@ -131,8 +131,26 @@ class ProductController
             $atributes
         );
         $this->save($product);
-        \App\Helper::dd($product);
+//        \App\Helper::dd($product);
         return new RedirectResponse('/');
+    }
+
+    public function delete(): Response
+    {
+        $list = json_decode(file_get_contents("php://input"));
+        try {
+            foreach ($list as $sku) {
+                $builder = $this->database->createQueryBuilder()
+                    ->delete('products')
+                    ->where('sku = :sku')
+                    ->setParameter('sku', $sku);
+                $builder->executeQuery();
+            }
+        } catch (Exception $e) {
+            \App\Helper::dump($e->getMessage());
+        }
+
+        return new JsonResponse(200, ['OK']);
     }
 
     public function getProductTypes(): array
@@ -147,25 +165,24 @@ class ProductController
 
     public function createTable()
     {
-        $schema = $this->database->createSchemaManager();
         try {
+            $schema = $this->database->createSchemaManager();
             if ($schema->tablesExist('products')) {
                 $schema->dropTable('products');
             }
-            if (!$schema->tablesExist('products')) {
-                $products = new Table('products');
-                $products->addColumn('sku', 'string', ['length' => 255]);
-                $products->setPrimaryKey(['sku']);
-                $products->addUniqueIndex(['sku']);
-                $products->addColumn('name', 'string', ['length' => 255]);
-                $products->addColumn('price', 'integer');
-                $products->addColumn('type', 'string', ['length' => 255]);
-                $products->addColumn('atributesJson', 'json');
-                $products->addColumn('atributesSerialized', 'text');
-                $schema->createTable($products);
-            }
+
+            $products = new Table('products');
+            $products->addColumn('sku', 'string', ['length' => 255, 'notnull' => true]);
+            $products->setPrimaryKey(['sku']);
+            $products->addUniqueIndex(['sku']);
+            $products->addColumn('name', 'string', ['length' => 255]);
+            $products->addColumn('price', 'integer');
+            $products->addColumn('type', 'string', ['length' => 255]);
+            $products->addColumn('atributesJson', 'json');
+            $products->addColumn('atributesSerialized', 'text');
+            $schema->createTable($products);
         } catch (Exception $e) {
-            echo $e->getMessage();
+            \App\Helper::dump($e->getMessage());
         }
     }
 
@@ -188,9 +205,10 @@ class ProductController
         ]));
     }
 
-    public function migrate()
+    public function migrate(): Response
     {
         $this->createTable();
         $this->seedTable();
+        return new RedirectResponse('/');
     }
 }
