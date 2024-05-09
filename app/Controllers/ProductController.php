@@ -142,7 +142,7 @@ class ProductController
             $builder = $this->database->createQueryBuilder()
                 ->delete('products')
                 ->where('sku in (:list)')
-                ->setParameter(':list', [$list], [\Doctrine\DBAL\ArrayParameterType::STRING]);
+                ->setParameter('list', $list, [\Doctrine\DBAL\ArrayParameterType::STRING]);
 
             $builder->executeQuery();
         } catch (Exception $e) {
