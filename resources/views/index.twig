@@ -13,10 +13,10 @@
 
 <div class="container-xl">
     <a href="/add-product">
-        <button>ADD</button>
+        <button class="btn btn-primary">ADD</button>
     </a>
 
-    <button>MASS DELETE</button>
+    <button class="btn btn-primary">MASS DELETE</button>
     <div class="row row-cols-1 row-cols-xl-4 g-4">
         {% for product in products %}
             <div class="col">
@@ -26,7 +26,7 @@
                         <h5 class="card-title">name: {{ product.name }}</h5>
                         <div>SKU: {{ product.sku }}</div>
                         <div>price: {{ product.price }}</div>
-                        <div>type: {{ product.atributes.productType }}</div>
+                        <div>type: {{ product.type }}</div>
 
 
                         {% for atribute in product.atributes %}
