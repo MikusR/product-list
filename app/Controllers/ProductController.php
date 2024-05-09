@@ -43,44 +43,20 @@ class ProductController
                 'description' => $e->getMessage()
             ];
         }
-
-        $schema = $this->database->createSchemaManager();
-        if (!$schema->tablesExist('products')) {
-            $products = new Table('products');
-            $products->addColumn('sku', 'string', ['length' => 255]);
-            $products->setPrimaryKey(['sku']);
-            $products->addUniqueIndex(['sku']);
-            $products->addColumn('name', 'string', ['length' => 255]);
-            $products->addColumn('price', 'integer');
-//            $products->addColumn('type', 'string', ['length' => 255]);
-            $products->addColumn('atributesJson', 'json');
-            $products->addColumn('atributesSerialized', 'text');
-            $schema->createTable($products);
-        }
-//        $this->save(new Product('123', 'Product 1', 100, [['name' => 'color', 'value' => 'red']]));
-//        $this->save(new Product('456', 'Product 2', 200, [['name' => 'color', 'value' => 'blue']]));
-//        $this->save(
-//            new Product(
-//                '789', 'Product 3', 300,
-//                [
-//                    ['name' => 'weight', 'value' => '10kg'],
-//                    ['name' => 'height', 'value' => '10cm']
-//                ]
-//            )
-//        );
-//        $this->save(new Product('012', 'Product 4', 400, [
-//            ['name' => 'weight', 'value' => '20kg'],
-//            ['name' => 'height', 'value' => '20cm']
-//        ]));
     }
 
     public function index(): Response
     {
         $products = new ProductCollection();
-        $productsList = $this->database->createQueryBuilder()
-            ->select('*')
-            ->from('products')
-            ->fetchAllAssociative();
+        try {
+            $productsList = $this->database->createQueryBuilder()
+                ->select('*')
+                ->from('products')
+                ->fetchAllAssociative();
+        } catch (Exception $e) {
+            $productsList = [];
+            echo $e->getMessage();
+        }
 
         foreach ($productsList as $product) {
             $products->add(
@@ -88,6 +64,7 @@ class ProductController
                     $product['sku'],
                     $product['name'],
                     $product['price'],
+                    $product['type'],
                     unserialize($product['atributesSerialized'])
                 )
             );
@@ -103,23 +80,29 @@ class ProductController
     {
         $builder = $this->database->createQueryBuilder();
 
-        $builder
-            ->insert('products')
-            ->values([
-                'sku' => ':sku',
-                'name' => ':name',
-                'price' => ':price',
-                'atributesJson' => ':atributesJson',
-                'atributesSerialized' => ':atributesSerialized'
-            ])
-            ->setParameters([
-                'sku' => $product->getSku(),
-                'name' => $product->getName(),
-                'price' => $product->getPrice(),
-                'atributesJson' => json_encode($product->getAtributes()),
-                'atributesSerialized' => serialize($product->getAtributes()),
-            ])
-            ->executeQuery();
+        try {
+            $builder
+                ->insert('products')
+                ->values([
+                    'sku' => ':sku',
+                    'name' => ':name',
+                    'price' => ':price',
+                    'type' => ':type',
+                    'atributesJson' => ':atributesJson',
+                    'atributesSerialized' => ':atributesSerialized'
+                ])
+                ->setParameters([
+                    'sku' => $product->getSku(),
+                    'name' => $product->getName(),
+                    'price' => $product->getPrice(),
+                    'type' => $product->getType(),
+                    'atributesJson' => json_encode($product->getAtributes()),
+                    'atributesSerialized' => serialize($product->getAtributes()),
+                ])
+                ->executeQuery();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
     }
 
     public function addProduct(): response
@@ -144,6 +127,7 @@ class ProductController
             $_POST['sku'],
             $_POST['name'],
             (int)$_POST['price'],
+            $_POST['productType'],
             $atributes
         );
         $this->save($product);
@@ -159,5 +143,54 @@ class ProductController
             'Furniture' => ['name' => 'furniture', 'atributes' => ['height', 'width', 'length']]
         ];
         return $types;
+    }
+
+    public function createTable()
+    {
+        $schema = $this->database->createSchemaManager();
+        try {
+            if ($schema->tablesExist('products')) {
+                $schema->dropTable('products');
+            }
+            if (!$schema->tablesExist('products')) {
+                $products = new Table('products');
+                $products->addColumn('sku', 'string', ['length' => 255]);
+                $products->setPrimaryKey(['sku']);
+                $products->addUniqueIndex(['sku']);
+                $products->addColumn('name', 'string', ['length' => 255]);
+                $products->addColumn('price', 'integer');
+                $products->addColumn('type', 'string', ['length' => 255]);
+                $products->addColumn('atributesJson', 'json');
+                $products->addColumn('atributesSerialized', 'text');
+                $schema->createTable($products);
+            }
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+    }
+
+    public function seedTable()
+    {
+        $this->save(new Product('123', 'Product 1', 100, 'DVD', [['name' => 'color', 'value' => 'red']]));
+        $this->save(new Product('456', 'Product 2', 200, 'Book', [['name' => 'color', 'value' => 'blue']]));
+        $this->save(
+            new Product(
+                '789', 'Product 3', 300, 'Furniture',
+                [
+                    ['name' => 'weight', 'value' => '10kg'],
+                    ['name' => 'height', 'value' => '10cm']
+                ]
+            )
+        );
+        $this->save(new Product('012', 'Product 4', 400, 'Furniture', [
+            ['name' => 'weight', 'value' => '20kg'],
+            ['name' => 'height', 'value' => '20cm']
+        ]));
+    }
+
+    public function migrate()
+    {
+        $this->createTable();
+        $this->seedTable();
     }
 }
