@@ -66,7 +66,7 @@ class ProductController
                     $product['name'],
                     $product['price'],
                     $product['type'],
-                    unserialize($product['atributesSerialized'])
+                    json_decode($product['atributesJson'])
                 )
             );
         }
@@ -90,7 +90,6 @@ class ProductController
                     'price' => ':price',
                     'type' => ':type',
                     'atributesJson' => ':atributesJson',
-                    'atributesSerialized' => ':atributesSerialized'
                 ])
                 ->setParameters([
                     'sku' => $product->getSku(),
@@ -98,7 +97,6 @@ class ProductController
                     'price' => $product->getPrice(),
                     'type' => $product->getType(),
                     'atributesJson' => json_encode($product->getAtributes()),
-                    'atributesSerialized' => serialize($product->getAtributes()),
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
@@ -179,7 +177,6 @@ class ProductController
             $products->addColumn('price', 'integer');
             $products->addColumn('type', 'string', ['length' => 255]);
             $products->addColumn('atributesJson', 'json');
-            $products->addColumn('atributesSerialized', 'text');
             $schema->createTable($products);
         } catch (Exception $e) {
             \App\Helper::dump($e->getMessage());
