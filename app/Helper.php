@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-
 use App\Repositories\MySqlRepository;
-
 
 class Helper
 {
@@ -39,7 +37,6 @@ class Helper
     public static function test()
     {
     }
-
 
     public function seedTable()
     {

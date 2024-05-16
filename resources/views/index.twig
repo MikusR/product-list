@@ -63,16 +63,16 @@
 
     async function postJSON(data) {
         try {
-            console.log(data);
             const response = await fetch("/delete", {
-                method: "POST", // or 'PUT'
+                method: "POST",
                 headers: {
+                    "X-CSRF-Token": "{{ csrf_token }}",
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             });
 
-            // const result = await response.text();
+            const result = await response.text();
             // document.body.innerHTML = result;
             // console.log(result);
             window.location.replace("/");

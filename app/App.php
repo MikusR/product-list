@@ -24,8 +24,7 @@ class App
 
         $loader = new FilesystemLoader(__DIR__.'/../resources/views/');
         $twig = new Environment($loader, ['debug' => true,]);
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-
+        
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -53,12 +52,12 @@ class App
         switch ($routeInfo[0]) {
             case FastRoute\Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
-                \App\Helper::dump("404e");
+                header('Location: /');
                 break;
             case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
-                \App\Helper::dump("405");
                 // ... 405 Method Not Allowed
+                header('Location: /');
                 break;
             case FastRoute\Dispatcher::FOUND:
 
@@ -66,7 +65,7 @@ class App
                 $vars = $routeInfo[2];
                 //split handler into controller and method
                 [$controller, $method] = $handler;
-                //
+
                 $response = (new $controller())->{$method}(...array_values($vars));
                 switch (true) {
                     case $response instanceof ViewResponse:

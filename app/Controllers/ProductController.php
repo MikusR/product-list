@@ -37,6 +37,7 @@ class ProductController
 
     public function store(): Response
     {
+        $errors = [];
         $data = [
             'sku' => $_POST['sku'],
             'name' => $_POST['name'],
@@ -48,18 +49,27 @@ class ProductController
             'width' => $_POST['width'],
             'length' => $_POST['length']
         ];
-
-        $type = 'App\Models\Product'.$_POST['productType'];
-        if (class_exists($type)) {
-            $product = new $type($data);
-            $this->repository->save($product);
+        $errors = $this->validate($data);
+        if (empty($errors)) {
+            $type = 'App\Models\Product'.$_POST['productType'];
+            if (class_exists($type)) {
+                $product = new $type($data);
+                $this->repository->save($product);
+            }
+            return new RedirectResponse('/');
         }
 
-        return new RedirectResponse('/');
+        return new ViewResponse(
+            'addProduct',
+            ['types' => $this->getProductTypes(), 'errors' => $errors, 'data' => $data]
+        );
     }
 
     public function delete(): Response
     {
+        if ($_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['csrf_token']) {
+            return new JsonResponse(403, ['csrf token error']);
+        }
         $list = json_decode(file_get_contents("php://input"));
 
         foreach ($list as $sku) {
@@ -76,10 +86,44 @@ class ProductController
     public function getProductTypes(): array
     {
         $types = [
-            'DVD' => ['name' => 'DVD', 'atributes' => ['size']],
-            'Book' => ['name' => 'Book', 'atributes' => ['weight']],
-            'Furniture' => ['name' => 'Furniture', 'atributes' => ['height', 'width', 'length']]
+            'DVD' => ['name' => 'DVD', 'atributes' => ['size'], 'description' => 'Please, provide size in MB'],
+            'Book' => ['name' => 'Book', 'atributes' => ['weight'], 'description' => 'Please, provide weight in Kg'],
+            'Furniture' => [
+                'name' => 'Furniture',
+                'atributes' => ['height', 'width', 'length'],
+                'description' => 'Please, provide dimensions in cm'
+            ]
         ];
         return $types;
+    }
+
+    private function validate(array $data): array
+    {
+        $errors = [];
+        if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+            $errors['csrf_token'] = 'Invalid CSRF token';
+        }
+        if ($this->repository->getProduct($data['sku'])) {
+            $errors['sku'] = 'SKU already exists';
+        }
+        if ($data['price'] <= 0) {
+            $errors['price'] = 'Price must be greater than 0';
+        }
+        if ($data['size'] != '' && $data['size'] <= 0) {
+            $errors['size'] = 'Size must be greater than 0';
+        }
+        if ($data['weight'] != '' && $data['weight'] <= 0) {
+            $errors['weight'] = 'Weight must be greater than 0';
+        }
+        if ($data['height'] != '' && $data['height'] <= 0) {
+            $errors['height'] = 'Height must be greater than 0';
+        }
+        if ($data['width'] != '' && ($data['width'] <= 0)) {
+            $errors['width'] = 'Width must be greater than 0';
+        }
+        if ($data['length'] != '' && $data['length'] <= 0) {
+            $errors['length'] = 'Length must be greater than 0';
+        }
+        return $errors;
     }
 }

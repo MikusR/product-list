@@ -51,7 +51,7 @@ class MySqlRepository
                 ->fetchAllAssociative();
         } catch (Exception $e) {
             $productsList = [];
-            \App\Helper::dump($e->getMessage());
+            echo $e->getMessage();
         }
         $products = new ProductCollection();
         foreach ($productsList as $product) {
@@ -102,7 +102,7 @@ class MySqlRepository
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
-            Helper::dump($e);
+            echo $e->getMessage();
         }
     }
 
@@ -145,7 +145,7 @@ class MySqlRepository
             $products->addColumn('atributeValue', 'string', ['length' => 255]);
             $schema->createTable($products);
         } catch (Exception $e) {
-            \App\Helper::dump($e->getMessage());
+            echo $e->getMessage();
         }
     }
 }
