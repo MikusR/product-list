@@ -11,7 +11,7 @@ class Configuration
 {
     public function prepareSecrets()
     {
-        $dotenv = Dotenv::createImmutable(__DIR__.'/../');
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
         $dotenv->safeLoad();
     }
 
