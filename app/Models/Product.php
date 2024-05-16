@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use App\Helper;
-
-class Product
+abstract class Product
 {
     private string $sku;
     private string $name;
