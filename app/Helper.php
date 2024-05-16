@@ -5,9 +5,20 @@ declare(strict_types=1);
 namespace App;
 
 use App\Controllers\ProductController;
+use App\Models\Product;
+use App\Repositories\MySqlRepository;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\Table;
 
 class Helper
 {
+    private MySqlRepository $repository;
+
+    public function __construct()
+    {
+        $this->repository = new MySqlRepository();
+    }
+
     public static function info()
     {
         echo "<pre>";
@@ -31,6 +42,34 @@ class Helper
     {
     }
 
+
+    public function seedTable()
+    {
+        $this->repository->save(new Product('123', 'matrix', 100, 'DVD', [['name' => 'color', 'value' => 'red']]));
+        $this->repository->save(
+            new Product('456', 'war in peaces', 200, 'Book', [['name' => 'color', 'value' => 'blue']])
+        );
+        $this->repository->save(
+            new Product(
+                '789', 'shelf', 300, 'Furniture',
+                [
+                    ['name' => 'weight', 'value' => '10kg'],
+                    ['name' => 'height', 'value' => '10cm']
+                ]
+            )
+        );
+        $this->repository->save(new Product('012', 'table', 400, 'Furniture', [
+            ['name' => 'weight', 'value' => '20kg'],
+            ['name' => 'height', 'value' => '20cm']
+        ]));
+    }
+
+    public function migrate(): Response
+    {
+        $this->repository->createTable();
+        $this->seedTable();
+        return new RedirectResponse('/');
+    }
 }
 
 //foreach ($argv as $arg) {
