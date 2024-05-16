@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class ProductFurniture extends Product
+class Furniture extends Product
 {
     private string $attributeName = 'dimensions';
     private string $attributeValue;

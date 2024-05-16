@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class ProductBook extends Product
+class DVD extends Product
 {
-    private string $attributeName = 'weight';
+    private string $attributeName = 'size';
     private string $attributeValue;
 
     public function __construct($data)
     {
         parent::__construct($data);
-        $weight = $data['attributeValue'] ?? $data['weight']." Kg";
-        $this->setAttributeValue($weight);
+        $size = $data['attributeValue'] ?? $data['size']." MB";
+        $this->setAttributeValue($size);
     }
 
-    public function getattributeValue(): string
+    public function getAttributeValue(): string
     {
         return $this->attributeValue;
     }
@@ -35,5 +35,4 @@ class ProductBook extends Product
     {
         $this->attributeName = $attributeName;
     }
-
 }

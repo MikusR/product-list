@@ -51,7 +51,7 @@ class ProductController
         ];
         $errors = $this->validate($data);
         if (empty($errors)) {
-            $type = 'App\Models\Product'.$_POST['productType'];
+            $type = 'App\Models\\'.$_POST['productType'];
             if (class_exists($type)) {
                 $product = new $type($data);
                 $this->repository->save($product);

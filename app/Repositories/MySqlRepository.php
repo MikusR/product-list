@@ -122,7 +122,7 @@ class MySqlRepository
 
     public function buildModel(array $data): Product
     {
-        $type = 'App\Models\Product'.$data['type'];
+        $type = 'App\Models\\'.$data['type'];
 
         return new $type($data);
     }
