@@ -77,7 +77,8 @@
                            {% endif %} mb-3">
                 {% for attribute in type.attributes %}
                     <div class="mb-3 input-group">
-                        <label for="{{ attribute }}" class="input-group-text">{{ attribute|capitalize }}</label>
+                        <label for="{{ attribute }}" class="input-group-text">{{ attribute|capitalize }}
+                            ({{ type.unit }})</label>
                         <div class="">
                             <input type="number" min=0 id="{{ attribute }}" name="{{ attribute }}"
                                    class="form-control {% if errors[attribute] %}is-invalid{% endif %}"
