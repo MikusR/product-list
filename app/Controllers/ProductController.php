@@ -67,6 +67,9 @@ class ProductController
 
     public function delete(): Response
     {
+        if ($_SERVER['HTTP_X_CSRF_TOKEN'] != $_SESSION['csrf_token']) {
+            return new JsonResponse(403, ['csrf token error']);
+        }
         $list = json_decode(file_get_contents("php://input"));
 
         foreach ($list as $sku) {
