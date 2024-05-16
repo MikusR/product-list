@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Helper;
+
 class Product
 {
     private string $sku;
     private string $name;
     private int $price;
     private string $type;
-    private array $atributes;
 
-    public function __construct(string $sku, string $name, int $price, string $type, array $atributes)
+    public function __construct(array $data)
     {
-        $this->setSku($sku);
-        $this->setName($name);
-        $this->setPrice($price);
-        $this->setType($type);
-        $this->setAtributes($atributes);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
     }
 
     public function getSku(): string
@@ -61,13 +61,5 @@ class Product
         $this->type = $type;
     }
 
-    public function getAtributes(): array
-    {
-        return $this->atributes;
-    }
 
-    public function setAtributes(array $atributes): void
-    {
-        $this->atributes = $atributes;
-    }
 }
