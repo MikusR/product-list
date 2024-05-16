@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Helper;
+
 class Product
 {
     private string $sku;
@@ -11,7 +13,7 @@ class Product
     private int $price;
     private string $type;
 
-    public function __construct(array $data = [])
+    public function __construct(array $data)
     {
         $this->setSku($data['sku']);
         $this->setName($data['name']);

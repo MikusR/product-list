@@ -4,11 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use App\Controllers\ProductController;
-use App\Models\Product;
+
 use App\Repositories\MySqlRepository;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Schema\Table;
+
 
 class Helper
 {
@@ -45,25 +43,52 @@ class Helper
 
     public function seedTable()
     {
-        $this->repository->save(
-            new Product(
-                '123', 'matrix', 100, 'DVD', 'size', '10mb'
-            )
+        $model = $this->repository->buildModel(
+            ['sku' => '123', 'name' => 'Matrix', 'price' => 100, 'type' => 'DVD', 'size' => '600']
         );
-        
-        $this->repository->save(
-            new Product(
-                '456', 'war in peaces', 200, 'Book', 'color', 'red'
-            )
+        $this->repository->save($model);
+        $model = $this->repository->buildModel(
+            ['sku' => '456', 'name' => 'Matrix 2', 'price' => 110, 'type' => 'DVD', 'size' => '700']
         );
-        $this->repository->save(
-            new Product(
-                '789', 'shelf', 300, 'Furniture', 'dimensions', '10x20x10'
-            )
+        $this->repository->save($model);
+        $model = $this->repository->buildModel(
+            [
+                'sku' => 'furn123',
+                'name' => 'Table',
+                'price' => 440,
+                'type' => 'Furniture',
+                'height' => '100',
+                'width' => '200',
+                'length' => '300'
+            ]
         );
-        $this->repository->save(
-            new Product('012', 'table', 400, 'Furniture', 'dimensions', '10x10x10')
+        $this->repository->save($model);
+        $model = $this->repository->buildModel(
+            [
+                'sku' => 'book124',
+                'name' => 'Boring',
+                'price' => 560,
+                'type' => 'Book',
+                'weight' => '10',
+            ]
         );
+        $this->repository->save($model);
+        $model = $this->repository->buildModel(
+            [
+                'sku' => 'furn124',
+                'name' => 'Chair',
+                'price' => 60,
+                'type' => 'Furniture',
+                'height' => '10',
+                'width' => '560',
+                'length' => '110'
+            ]
+        );
+        $this->repository->save($model);
+        $model = $this->repository->buildModel(
+            ['sku' => 'zdvd256', 'name' => 'Matrix 3', 'price' => 210, 'type' => 'DVD', 'size' => '650']
+        );
+        $this->repository->save($model);
     }
 
     public function migrate(): Response

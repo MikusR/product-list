@@ -55,16 +55,7 @@ class MySqlRepository
         }
         $products = new ProductCollection();
         foreach ($productsList as $product) {
-            $products->add(
-                new Product(
-                    $product['sku'],
-                    $product['name'],
-                    $product['price'],
-                    $product['type'],
-                    $product['atributeName'],
-                    $product['atributeValue']
-                )
-            );
+            $products->add($this->buildModel($product));
         }
         return $products;
     }
@@ -111,7 +102,7 @@ class MySqlRepository
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
-            Helper::dd($e);
+            Helper::dump($e);
         }
     }
 
@@ -130,15 +121,9 @@ class MySqlRepository
 
     public function buildModel(array $data): Product
     {
-        $product = new Product(
-            $data['sku'],
-            $data['name'],
-            (int)$data['price'],
-            $data['type'],
-            $data['atributeName'],
-            $data['atributeValue']
-        );
-        return $product;
+        $type = 'App\Models\Product'.$data['type'];
+
+        return new $type($data);
     }
 
     public function createTable()

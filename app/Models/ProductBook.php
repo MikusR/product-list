@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-class ProductFurniture extends Product
+class ProductBook extends Product
 {
-    private string $atributeName = 'dimensions';
+    private string $atributeName = 'weight';
     private string $atributeValue;
 
     public function __construct($data)
     {
         parent::__construct($data);
-        $dimensions = $data['atributeValue'] ?? $data['height']."x".$data['width']."x".$data['length'];
-        $this->setAtributeValue($dimensions);
+        $weight = $data['atributeValue'] ?? $data['weight']." KG";
+        $this->setAtributeValue($weight);
     }
 
     public function getAtributeValue(): string
@@ -35,4 +35,5 @@ class ProductFurniture extends Product
     {
         $this->atributeName = $atributeName;
     }
+
 }

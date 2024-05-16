@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\JsonResponse;
-use App\Models\Product;
 use App\RedirectResponse;
 use App\Repositories\MySqlRepository;
 use App\Response;
@@ -31,9 +30,7 @@ class ProductController
 
     public function create(): response
     {
-        return new ViewResponse('addProduct', [
-            'types' => $this->getProductTypes()
-        ]);
+        return new ViewResponse('addProduct');
     }
 
     public function store(): Response
@@ -45,45 +42,35 @@ class ProductController
             ['name' => 'width', 'value' => $_POST['width']],
             ['name' => 'length', 'value' => $_POST['length']]
         ];
-//
-//            $_POST['sku'],
-//            $_POST['name'],
-//            (int)$_POST['price'],
-//            $_POST['productType'],
-//            $atributes
+        $data = [];
+        $data['sku'] = $_POST['sku'];
+        $data['name'] = $_POST['name'];
+        $data['price'] = (int)$_POST['price'];
+        $data['type'] = $_POST['productType'];
+        $data['atributes'] = $atributes;
+        $type = 'App\Models\Product'.$_POST['productType'];
 
-        $product = new Product();
-        $this->repository->save($product);
+        if (class_exists($type)) {
+            $product = new $type($data);
+            $this->repository->save($product);
+        }
+
         return new RedirectResponse('/');
     }
 
     public function delete(): Response
     {
         $list = json_decode(file_get_contents("php://input"));
-        try {
-            foreach ($list as $sku) {
-                $product = $this->repository->getProduct($sku);
-                if (!$product) {
-                    continue;
-                }
-                $this->repository->delete($product);
+
+        foreach ($list as $sku) {
+            $product = $this->repository->getProduct($sku);
+            if (!$product) {
+                continue;
             }
-        } catch (Exception $e) {
-            \App\Helper::dump($e->getMessage());
+            $this->repository->delete($product);
         }
 
         return new JsonResponse(200, ['OK']);
     }
-
-    public function getProductTypes(): array
-    {
-        $types = [
-            'DVD' => ['name' => 'dvd', 'atributes' => ['size']],
-            'Book' => ['name' => 'book', 'atributes' => ['weight']],
-            'Furniture' => ['name' => 'furniture', 'atributes' => ['height', 'width', 'length']]
-        ];
-        return $types;
-    }
-
 
 }

@@ -9,10 +9,11 @@ class ProductDVD extends Product
     private string $atributeName = 'size';
     private string $atributeValue;
 
-    public function __construct($data = [])
+    public function __construct($data)
     {
         parent::__construct($data);
-        $this->setAtributeValue($data['size']." MB");
+        $size = $data['atributeValue'] ?? $data['size']." MB";
+        $this->setAtributeValue($size);
     }
 
     public function getAtributeValue(): string
