@@ -49,7 +49,7 @@
         <div class="mb-3 input-group">
             <label for="price" class="input-group-text">Price</label>
             <div class="">
-                <input type="number" name="price" placeholder="price" id="price"
+                <input type="number" min=0 name="price" placeholder="price" id="price"
                        class="form-control {% if errors.price %}is-invalid{% endif %}"
                        value="{{ data.price }}" required>
                 {% if errors.price %}
@@ -79,7 +79,7 @@
                     <div class="mb-3 input-group">
                         <label for="{{ atribute }}" class="input-group-text">{{ atribute|capitalize }}</label>
                         <div class="">
-                            <input type="number" id="{{ atribute }}" name="{{ atribute }}"
+                            <input type="number" min=0 id="{{ atribute }}" name="{{ atribute }}"
                                    class="form-control {% if errors[atribute] %}is-invalid{% endif %}"
                                    value="{{ data[atribute] }}"
                                     {% if ((loop.parent.loop.first) or (data.type == type.name)) %} required {% endif %}>
