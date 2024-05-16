@@ -12,7 +12,7 @@ class ProductBook extends Product
     public function __construct($data)
     {
         parent::__construct($data);
-        $weight = $data['atributeValue'] ?? $data['weight']." KG";
+        $weight = $data['atributeValue'] ?? $data['weight']." Kg";
         $this->setAtributeValue($weight);
     }
 

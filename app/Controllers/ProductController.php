@@ -37,6 +37,7 @@ class ProductController
 
     public function store(): Response
     {
+        $errors = [];
         $data = [
             'sku' => $_POST['sku'],
             'name' => $_POST['name'],
@@ -48,14 +49,23 @@ class ProductController
             'width' => $_POST['width'],
             'length' => $_POST['length']
         ];
-
-        $type = 'App\Models\Product'.$_POST['productType'];
-        if (class_exists($type)) {
-            $product = new $type($data);
-            $this->repository->save($product);
+        if ($this->repository->getProduct($data['sku'])) {
+            $errors['sku'] = 'SKU already exists';
         }
 
-        return new RedirectResponse('/');
+        if (empty($errors)) {
+            $type = 'App\Models\Product'.$_POST['productType'];
+            if (class_exists($type)) {
+                $product = new $type($data);
+                $this->repository->save($product);
+            }
+            return new RedirectResponse('/');
+        }
+
+        return new ViewResponse(
+            'addProduct',
+            ['types' => $this->getProductTypes(), 'errors' => $errors, 'data' => $data]
+        );
     }
 
     public function delete(): Response
@@ -76,9 +86,13 @@ class ProductController
     public function getProductTypes(): array
     {
         $types = [
-            'DVD' => ['name' => 'DVD', 'atributes' => ['size']],
-            'Book' => ['name' => 'Book', 'atributes' => ['weight']],
-            'Furniture' => ['name' => 'Furniture', 'atributes' => ['height', 'width', 'length']]
+            'DVD' => ['name' => 'DVD', 'atributes' => ['size'], 'description' => 'Please, provide size in MB'],
+            'Book' => ['name' => 'Book', 'atributes' => ['weight'], 'description' => 'Please, provide weight in Kg'],
+            'Furniture' => [
+                'name' => 'Furniture',
+                'atributes' => ['height', 'width', 'length'],
+                'description' => 'Please, provide dimensions in cm'
+            ]
         ];
         return $types;
     }

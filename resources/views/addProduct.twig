@@ -17,45 +17,51 @@
         <div class="mb-3 row">
             <label for="sku" class="col-sm-2 col-form-label">Sku</label>
             <div class="col-sm-10">
-                <input type="text" name="sku" placeholder="sku" id="sku" class="form-control">
+                <input type="text" name="sku" placeholder="sku" id="sku" class="form-control" value="{{ data.sku }}"
+                       required>
             </div>
         </div>
         <div class="mb-3 row">
             <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
-                <input type="text" name="name" placeholder="name" id="name" class="form-control">
+                <input type="text" name="name" placeholder="name" id="name" class="form-control" value="{{ data.name }}"
+                       required>
             </div>
         </div>
         <div class="mb-3 row">
             <label for="price" class="col-sm-2 col-form-label">Price</label>
             <div class="col-sm-10">
-                <input type="number" name="price" placeholder="price" id="price" class="form-control">
+                <input type="number" name="price" placeholder="price" id="price" class="form-control"
+                       value="{{ data.price }}" required>
             </div>
         </div>
         <div class="mb-3 row">
             <label for="productType" class="col-sm-2 col-form-label">Product Type</label>
             <div class="col-sm-10">
-                <select name="productType" id="productType" onchange="" class="form-select">
-                    <option selected="selected" value="DVD">DVD</option>
-                    <option value="Book">Book</option>
-                    <option value="Furniture">Furniture</option>
+                <select name="productType" id="productType" class="form-select">
+                    {% for type in types %}
+                        <option {% if (type.name == data.type) %} selected {% endif %}
+                                value="{{ type.name }}">{{ type.name }}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>
-
         {% for type in types %}
-            <fieldset id="{{ type.name }}" {% if not loop.first %} class="d-none row mb-3" {% endif %}>
+            <fieldset id="{{ type.name }}" {% if not (data.type == type.name) %} class="d-none row mb-3" {% endif %}>
+
                 {% for atribute in type.atributes %}
                     <div class="mb-3 row">
                         <label for="{{ atribute }}" class="col-sm-2 col-form-label">{{ atribute|capitalize }}</label>
                         <div class="col-sm-10">
-                            <input type="text" id="{{ atribute }}" name="{{ atribute }}" class="form-control">
+                            <input type="text" id="{{ atribute }}" name="{{ atribute }}" class="form-control"
+                                   value="{{ data[atribute] }}"
+                                    {% if (data.type == type.name) %} required {% endif %}>
                         </div>
                     </div>
                 {% endfor %}
             </fieldset>
         {% endfor %}
-        <button class="btn btn-primary" type="submit">Save</button>
+        <button class=" btn btn-primary" type="submit">Save</button>
         <a href="/" class="btn btn-primary">Cancel</a>
     </form>
 </div>
@@ -65,8 +71,15 @@
         let type = this.value;
         document.querySelectorAll('fieldset').forEach(function (element) {
             element.classList.add('d-none');
+            element.querySelectorAll('input').forEach(function (input) {
+                input.removeAttribute('required');
+            });
         })
-        document.getElementById(type).classList.remove('d-none');
+        const fieldset = document.getElementById(type);
+        fieldset.classList.remove('d-none');
+        fieldset.querySelectorAll('input').forEach(function (input) {
+            input.required = true;
+        });
     })
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
