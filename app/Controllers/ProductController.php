@@ -43,11 +43,11 @@ class ProductController
             'name' => $_POST['name'],
             'price' => (int)$_POST['price'],
             'type' => $_POST['productType'],
-            'size' => (int)$_POST['size'],
-            'weight' => (int)$_POST['weight'],
-            'height' => (int)$_POST['height'],
-            'width' => (int)$_POST['width'],
-            'length' => (int)$_POST['length']
+            'size' => $_POST['size'],
+            'weight' => $_POST['weight'],
+            'height' => $_POST['height'],
+            'width' => $_POST['width'],
+            'length' => $_POST['length']
         ];
         $errors = $this->validate($data);
         if (empty($errors)) {
@@ -106,13 +106,19 @@ class ProductController
         if ($data['price'] <= 0) {
             $errors['price'] = 'Price must be greater than 0';
         }
-        if ($data['weight'] <= 0) {
+        if ($data['size'] != '' && $data['size'] <= 0) {
+            $errors['size'] = 'Size must be greater than 0';
+        }
+        if ($data['weight'] != '' && $data['weight'] <= 0) {
             $errors['weight'] = 'Weight must be greater than 0';
         }
-        if ($data['height'] <= 0) {
+        if ($data['height'] != '' && $data['height'] <= 0) {
             $errors['height'] = 'Height must be greater than 0';
         }
-        if ($data['length'] <= 0) {
+        if ($data['width'] != '' && ($data['width'] <= 0)) {
+            $errors['width'] = 'Width must be greater than 0';
+        }
+        if ($data['length'] != '' && $data['length'] <= 0) {
             $errors['length'] = 'Length must be greater than 0';
         }
         return $errors;

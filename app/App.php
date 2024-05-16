@@ -24,8 +24,7 @@ class App
 
         $loader = new FilesystemLoader(__DIR__.'/../resources/views/');
         $twig = new Environment($loader, ['debug' => true,]);
-        $twig->addExtension(new \Twig\Extension\DebugExtension());
-
+        
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -66,7 +65,7 @@ class App
                 $vars = $routeInfo[2];
                 //split handler into controller and method
                 [$controller, $method] = $handler;
-              
+
                 $response = (new $controller())->{$method}(...array_values($vars));
                 switch (true) {
                     case $response instanceof ViewResponse:

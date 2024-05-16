@@ -16,11 +16,14 @@
         <div class="invalid-feedback">
         {{ errors.csrf_token }}
         </div>{% endif %}
+    {% for error in errors %}
+        <div>{{ error }}</div>
+    {% endfor %}
     <form action="/" method="POST" id="product_form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-        <div class="mb-3 row">
-            <label for="sku" class="col-sm-2 col-form-label">Sku</label>
-            <div class="col-sm-10">
+        <div class="mb-3 input-group">
+            <label for="sku" class="input-group-text">Sku</label>
+            <div class="">
                 <input type="text" name="sku" placeholder="sku" id="sku"
                        class="form-control {% if errors.sku %}is-invalid{% endif %}" value="{{ data.sku }}"
                        required>
@@ -31,9 +34,9 @@
 
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="name" class="col-sm-2 col-form-label">Name</label>
-            <div class="col-sm-10">
+        <div class="mb-3 input-group">
+            <label for="name" class="input-group-text">Name</label>
+            <div class="">
                 <input type="text" name="name" placeholder="name" id="name"
                        class="form-control {% if errors.name %}is-invalid{% endif %}" value="{{ data.name }}"
                        required>
@@ -43,9 +46,9 @@
                     </div>{% endif %}
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="price" class="col-sm-2 col-form-label">Price</label>
-            <div class="col-sm-10">
+        <div class="mb-3 input-group">
+            <label for="price" class="input-group-text">Price</label>
+            <div class="">
                 <input type="number" name="price" placeholder="price" id="price"
                        class="form-control {% if errors.price %}is-invalid{% endif %}"
                        value="{{ data.price }}" required>
@@ -55,9 +58,9 @@
                     </div>{% endif %}
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="productType" class="col-sm-2 col-form-label">Product Type</label>
-            <div class="col-sm-10">
+        <div class="input-group mb-3">
+            <label for="productType" class="input-group-text">Product Type</label>
+            <div class="">
                 <select name="productType" id="productType" class="form-select">
                     {% for type in types %}
                         <option {% if (type.name == data.type) %} selected {% endif %}
@@ -68,23 +71,27 @@
         </div>
         {% for type in types %}
             <fieldset
-                    id="{{ type.name }}" {% if not ((loop.first) or (data.type == type.name)) %} class="d-none row mb-3" {% endif %}>
-
+                    id="{{ type.name }}"
+                    class="{% if (not loop.first) and (data.type is empty) %}d-none
+                           {% elseif (not (data.type is empty)) and (data.type != type.name) %}d-none
+                           {% endif %} mb-3">
                 {% for atribute in type.atributes %}
-                    <div class="mb-3 row">
-                        <label for="{{ atribute }}" class="col-sm-2 col-form-label">{{ atribute|capitalize }}</label>
-                        <div class="col-sm-10">
+                    <div class="mb-3 input-group">
+                        <label for="{{ atribute }}" class="input-group-text">{{ atribute|capitalize }}</label>
+                        <div class="">
                             <input type="number" id="{{ atribute }}" name="{{ atribute }}"
-                                   class="form-control {% if errors.atribute %}is-invalid{% endif %}"
+                                   class="form-control {% if errors[atribute] %}is-invalid{% endif %}"
                                    value="{{ data[atribute] }}"
-                                    {% if (data.type == type.name) %} required {% endif %}>
-                            {% if errors.atribute %}
+                                    {% if ((loop.parent.loop.first) or (data.type == type.name)) %} required {% endif %}>
+                            {% if errors[atribute] %}
                                 <div class="invalid-feedback">
-                                {{ errors.atribute }}
+                                {{ errors[atribute] }}
                                 </div>{% endif %}
                         </div>
                     </div>
+
                 {% endfor %}
+                <div>{{ type.description }}</div>
             </fieldset>
         {% endfor %}
         <button class=" btn btn-primary" type="submit">Save</button>
@@ -99,6 +106,7 @@
             element.classList.add('d-none');
             element.querySelectorAll('input').forEach(function (input) {
                 input.removeAttribute('required');
+                input.value = '';
             });
         })
         const fieldset = document.getElementById(type);
