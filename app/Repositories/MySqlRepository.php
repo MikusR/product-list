@@ -48,6 +48,7 @@ class MySqlRepository
             $productsList = $this->database->createQueryBuilder()
                 ->select('*')
                 ->from('products')
+                ->orderBy('sku')
                 ->fetchAllAssociative();
         } catch (Exception $e) {
             $productsList = [];
