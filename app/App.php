@@ -24,17 +24,16 @@ class App
 
         $loader = new FilesystemLoader(__DIR__.'/../resources/views/');
         $twig = new Environment($loader, ['debug' => true,]);
-        
+
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
             $r->addRoute('GET', '/info', [Helper::class, 'info']);
             $r->addRoute('GET', '/migrate', [Helper::class, 'migrate']);
-            $r->addRoute('GET', '/delete', [ProductController::class, 'delete']);
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'create']);
             $r->addRoute('POST', '/', [ProductController::class, 'store']);
-            $r->addRoute('POST', '/delete', [ProductController::class, 'delete']);
+            $r->addRoute('DELETE', '/delete', [ProductController::class, 'delete']);
         });
 
         // Fetch method and URI from somewhere
