@@ -4,7 +4,7 @@
 
 Application for listing products
 
-![](images/main.png "Main screen of application")
+![Main screen of application](images/main.png "Main screen of application")
 
 ## Requirements
 
@@ -77,19 +77,34 @@ localhost:9876/migrate
 
 ## Functionality
 
-### delete
+### Delete
+
+Delete multiple products
 
 ![](images/delete.png "Delete multiple products")
 
-### add new product
+### Add new product
 
-Each product type has different attributes
+#### Each product type has different attributes
+
+You can add DVD
 
 ![](images/dvd.png "You can add DVD")
+
+You can add Book
+
 ![](images/book.png "You can add Book")
+
+You can add Furniture
+
 ![](images/furniture.png "You can add Furniture")
 
-There are validation checks
+#### There are validation checks
+
+If a sku already exists
 
 ![](images/sku_exists.png "If a sku already exists")
+
+Negative price entered
+
 ![](images/negative_price.png "Negative price entered")
