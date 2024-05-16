@@ -23,7 +23,7 @@ class App
         $config->prepareSecrets();
 
         $loader = new FilesystemLoader(__DIR__.'/../resources/views/');
-        $twig = new Environment($loader, ['debug' => true,]);
+        $twig = new Environment($loader);
 
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
