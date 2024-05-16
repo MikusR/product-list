@@ -30,7 +30,7 @@ class App
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'create']);
-            $r->addRoute('POST', '/', [ProductController::class, 'store']);
+            $r->addRoute('POST', '/product', [ProductController::class, 'store']);
             $r->addRoute('DELETE', '/delete', [ProductController::class, 'delete']);
         });
 
