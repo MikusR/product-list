@@ -15,25 +15,25 @@
     <form action="/" method="POST" id="product_form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
         <div class="mb-3 row">
-            <label for="sku" class="col-sm-2 col-form-label">sku</label>
+            <label for="sku" class="col-sm-2 col-form-label">Sku</label>
             <div class="col-sm-10">
                 <input type="text" name="sku" placeholder="sku" id="sku" class="form-control">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="name" class="col-sm-2 col-form-label">name</label>
+            <label for="name" class="col-sm-2 col-form-label">Name</label>
             <div class="col-sm-10">
                 <input type="text" name="name" placeholder="name" id="name" class="form-control">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="price" class="col-sm-2 col-form-label">price</label>
+            <label for="price" class="col-sm-2 col-form-label">Price</label>
             <div class="col-sm-10">
                 <input type="number" name="price" placeholder="price" id="price" class="form-control">
             </div>
         </div>
         <div class="mb-3 row">
-            <label for="productType" class="col-sm-2 col-form-label">productType</label>
+            <label for="productType" class="col-sm-2 col-form-label">Product Type</label>
             <div class="col-sm-10">
                 <select name="productType" id="productType" onchange="" class="form-select">
                     <option selected="selected" value="DVD">DVD</option>
@@ -47,7 +47,7 @@
             <fieldset id="{{ type.name }}" {% if not loop.first %} class="d-none row mb-3" {% endif %}>
                 {% for atribute in type.atributes %}
                     <div class="mb-3 row">
-                        <label for="{{ atribute }}" class="col-sm-2 col-form-label">{{ atribute }}</label>
+                        <label for="{{ atribute }}" class="col-sm-2 col-form-label">{{ atribute|capitalize }}</label>
                         <div class="col-sm-10">
                             <input type="text" id="{{ atribute }}" name="{{ atribute }}" class="form-control">
                         </div>

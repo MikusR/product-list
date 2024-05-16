@@ -22,6 +22,7 @@ class ProductController
     public function index(): Response
     {
         $products = $this->repository->getAll();
+
         return new ViewResponse(
             'index',
             ['products' => $products->getProducts()]
@@ -30,26 +31,25 @@ class ProductController
 
     public function create(): response
     {
-        return new ViewResponse('addProduct');
+        $types = $this->getProductTypes();
+        return new ViewResponse('addProduct', ['types' => $types]);
     }
 
     public function store(): Response
     {
-        $atributes = [
-            ['name' => 'size', 'value' => $_POST['size']],
-            ['name' => 'weight', 'value' => $_POST['weight']],
-            ['name' => 'height', 'value' => $_POST['height']],
-            ['name' => 'width', 'value' => $_POST['width']],
-            ['name' => 'length', 'value' => $_POST['length']]
+        $data = [
+            'sku' => $_POST['sku'],
+            'name' => $_POST['name'],
+            'price' => (int)$_POST['price'],
+            'type' => $_POST['productType'],
+            'size' => $_POST['size'],
+            'weight' => $_POST['weight'],
+            'height' => $_POST['height'],
+            'width' => $_POST['width'],
+            'length' => $_POST['length']
         ];
-        $data = [];
-        $data['sku'] = $_POST['sku'];
-        $data['name'] = $_POST['name'];
-        $data['price'] = (int)$_POST['price'];
-        $data['type'] = $_POST['productType'];
-        $data['atributes'] = $atributes;
-        $type = 'App\Models\Product'.$_POST['productType'];
 
+        $type = 'App\Models\Product'.$_POST['productType'];
         if (class_exists($type)) {
             $product = new $type($data);
             $this->repository->save($product);
@@ -73,4 +73,13 @@ class ProductController
         return new JsonResponse(200, ['OK']);
     }
 
+    public function getProductTypes(): array
+    {
+        $types = [
+            'DVD' => ['name' => 'DVD', 'atributes' => ['size']],
+            'Book' => ['name' => 'Book', 'atributes' => ['weight']],
+            'Furniture' => ['name' => 'Furniture', 'atributes' => ['height', 'width', 'length']]
+        ];
+        return $types;
+    }
 }
