@@ -75,17 +75,17 @@
                     class="{% if (not loop.first) and (data.type is empty) %}d-none
                            {% elseif (not (data.type is empty)) and (data.type != type.name) %}d-none
                            {% endif %} mb-3">
-                {% for atribute in type.atributes %}
+                {% for attribute in type.attributes %}
                     <div class="mb-3 input-group">
-                        <label for="{{ atribute }}" class="input-group-text">{{ atribute|capitalize }}</label>
+                        <label for="{{ attribute }}" class="input-group-text">{{ attribute|capitalize }}</label>
                         <div class="">
-                            <input type="number" min=0 id="{{ atribute }}" name="{{ atribute }}"
-                                   class="form-control {% if errors[atribute] %}is-invalid{% endif %}"
-                                   value="{{ data[atribute] }}"
+                            <input type="number" min=0 id="{{ attribute }}" name="{{ attribute }}"
+                                   class="form-control {% if errors[attribute] %}is-invalid{% endif %}"
+                                   value="{{ data[attribute] }}"
                                     {% if ((loop.parent.loop.first) or (data.type == type.name)) %} required {% endif %}>
-                            {% if errors[atribute] %}
+                            {% if errors[attribute] %}
                                 <div class="invalid-feedback">
-                                {{ errors[atribute] }}
+                                {{ errors[attribute] }}
                                 </div>{% endif %}
                         </div>
                     </div>

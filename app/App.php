@@ -28,8 +28,6 @@ class App
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
         $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-            $r->addRoute('GET', '/info', [Helper::class, 'info']);
-            $r->addRoute('GET', '/migrate', [Helper::class, 'migrate']);
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'create']);
             $r->addRoute('POST', '/', [ProductController::class, 'store']);

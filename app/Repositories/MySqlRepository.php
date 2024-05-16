@@ -89,16 +89,16 @@ class MySqlRepository
                     'name' => ':name',
                     'price' => ':price',
                     'type' => ':type',
-                    'atributename' => ':atributename',
-                    'atributevalue' => ':atributevalue'
+                    'attributename' => ':attributename',
+                    'attributevalue' => ':attributevalue'
                 ])
                 ->setParameters([
                     'sku' => $product->getSku(),
                     'name' => $product->getName(),
                     'price' => $product->getPrice(),
                     'type' => $product->getType(),
-                    'atributename' => $product->getAtributeName(),
-                    'atributevalue' => $product->getAtributeValue()
+                    'attributename' => $product->getAttributeName(),
+                    'attributevalue' => $product->getAttributeValue()
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
@@ -141,8 +141,8 @@ class MySqlRepository
             $products->addColumn('name', 'string', ['length' => 255]);
             $products->addColumn('price', 'integer');
             $products->addColumn('type', 'string', ['length' => 255]);
-            $products->addColumn('atributeName', 'string', ['length' => 255]);
-            $products->addColumn('atributeValue', 'string', ['length' => 255]);
+            $products->addColumn('attributeName', 'string', ['length' => 255]);
+            $products->addColumn('attributeValue', 'string', ['length' => 255]);
             $schema->createTable($products);
         } catch (Exception $e) {
             echo $e->getMessage();

@@ -86,11 +86,11 @@ class ProductController
     public function getProductTypes(): array
     {
         $types = [
-            'DVD' => ['name' => 'DVD', 'atributes' => ['size'], 'description' => 'Please, provide size in MB'],
-            'Book' => ['name' => 'Book', 'atributes' => ['weight'], 'description' => 'Please, provide weight in Kg'],
+            'DVD' => ['name' => 'DVD', 'attributes' => ['size'], 'description' => 'Please, provide size in MB'],
+            'Book' => ['name' => 'Book', 'attributes' => ['weight'], 'description' => 'Please, provide weight in Kg'],
             'Furniture' => [
                 'name' => 'Furniture',
-                'atributes' => ['height', 'width', 'length'],
+                'attributes' => ['height', 'width', 'length'],
                 'description' => 'Please, provide dimensions in cm'
             ]
         ];

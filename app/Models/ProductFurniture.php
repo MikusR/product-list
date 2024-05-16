@@ -6,33 +6,33 @@ namespace App\Models;
 
 class ProductFurniture extends Product
 {
-    private string $atributeName = 'dimensions';
-    private string $atributeValue;
+    private string $attributeName = 'dimensions';
+    private string $attributeValue;
 
     public function __construct($data)
     {
         parent::__construct($data);
-        $dimensions = $data['atributeValue'] ?? $data['height']."x".$data['width']."x".$data['length'];
-        $this->setAtributeValue($dimensions);
+        $dimensions = $data['attributeValue'] ?? $data['height']."x".$data['width']."x".$data['length'];
+        $this->setAttributeValue($dimensions);
     }
 
-    public function getAtributeValue(): string
+    public function getAttributeValue(): string
     {
-        return $this->atributeValue;
+        return $this->attributeValue;
     }
 
-    public function setAtributeValue(string $atributeValue): void
+    public function setAttributeValue(string $attributeValue): void
     {
-        $this->atributeValue = $atributeValue;
+        $this->attributeValue = $attributeValue;
     }
 
-    public function getAtributeName(): string
+    public function getAttributeName(): string
     {
-        return $this->atributeName;
+        return $this->attributeName;
     }
 
-    public function setAtributeName(string $atributeName): void
+    public function setAttributeName(string $attributeName): void
     {
-        $this->atributeName = $atributeName;
+        $this->attributeName = $attributeName;
     }
 }

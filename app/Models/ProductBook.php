@@ -6,34 +6,34 @@ namespace App\Models;
 
 class ProductBook extends Product
 {
-    private string $atributeName = 'weight';
-    private string $atributeValue;
+    private string $attributeName = 'weight';
+    private string $attributeValue;
 
     public function __construct($data)
     {
         parent::__construct($data);
-        $weight = $data['atributeValue'] ?? $data['weight']." Kg";
-        $this->setAtributeValue($weight);
+        $weight = $data['attributeValue'] ?? $data['weight']." Kg";
+        $this->setAttributeValue($weight);
     }
 
-    public function getAtributeValue(): string
+    public function getattributeValue(): string
     {
-        return $this->atributeValue;
+        return $this->attributeValue;
     }
 
-    public function setAtributeValue(string $atributeValue): void
+    public function setAttributeValue(string $attributeValue): void
     {
-        $this->atributeValue = $atributeValue;
+        $this->attributeValue = $attributeValue;
     }
 
-    public function getAtributeName(): string
+    public function getAttributeName(): string
     {
-        return $this->atributeName;
+        return $this->attributeName;
     }
 
-    public function setAtributeName(string $atributeName): void
+    public function setAttributeName(string $attributeName): void
     {
-        $this->atributeName = $atributeName;
+        $this->attributeName = $attributeName;
     }
 
 }
