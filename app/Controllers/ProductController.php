@@ -43,16 +43,13 @@ class ProductController
             'name' => $_POST['name'],
             'price' => (int)$_POST['price'],
             'type' => $_POST['productType'],
-            'size' => $_POST['size'],
-            'weight' => $_POST['weight'],
-            'height' => $_POST['height'],
-            'width' => $_POST['width'],
-            'length' => $_POST['length']
+            'size' => (int)$_POST['size'],
+            'weight' => (int)$_POST['weight'],
+            'height' => (int)$_POST['height'],
+            'width' => (int)$_POST['width'],
+            'length' => (int)$_POST['length']
         ];
-        if ($this->repository->getProduct($data['sku'])) {
-            $errors['sku'] = 'SKU already exists';
-        }
-
+        $errors = $this->validate($data);
         if (empty($errors)) {
             $type = 'App\Models\Product'.$_POST['productType'];
             if (class_exists($type)) {
@@ -95,5 +92,29 @@ class ProductController
             ]
         ];
         return $types;
+    }
+
+    private function validate(array $data): array
+    {
+        $errors = [];
+        if ($_POST['csrf_token'] != $_SESSION['csrf_token']) {
+            $errors['csrf_token'] = 'Invalid CSRF token';
+        }
+        if ($this->repository->getProduct($data['sku'])) {
+            $errors['sku'] = 'SKU already exists';
+        }
+        if ($data['price'] <= 0) {
+            $errors['price'] = 'Price must be greater than 0';
+        }
+        if ($data['weight'] <= 0) {
+            $errors['weight'] = 'Weight must be greater than 0';
+        }
+        if ($data['height'] <= 0) {
+            $errors['height'] = 'Height must be greater than 0';
+        }
+        if ($data['length'] <= 0) {
+            $errors['length'] = 'Length must be greater than 0';
+        }
+        return $errors;
     }
 }
