@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
+use App\Helper;
 use App\Models\Product;
 use App\Models\ProductCollection;
 use Doctrine\DBAL\Connection;
@@ -60,7 +61,8 @@ class MySqlRepository
                     $product['name'],
                     $product['price'],
                     $product['type'],
-                    $product['atributesJson']
+                    $product['atributeName'],
+                    $product['atributeValue']
                 )
             );
         }
@@ -96,17 +98,20 @@ class MySqlRepository
                     'name' => ':name',
                     'price' => ':price',
                     'type' => ':type',
-                    'atributesJson' => ':atributesJson',
+                    'atributename' => ':atributename',
+                    'atributevalue' => ':atributevalue'
                 ])
                 ->setParameters([
                     'sku' => $product->getSku(),
                     'name' => $product->getName(),
                     'price' => $product->getPrice(),
                     'type' => $product->getType(),
-                    'atributesJson' => json_encode($product->getAtributes()),
+                    'atributename' => $product->getAtributeName(),
+                    'atributevalue' => $product->getAtributeValue()
                 ])
                 ->executeQuery();
         } catch (Exception $e) {
+            Helper::dd($e);
         }
     }
 
@@ -130,7 +135,8 @@ class MySqlRepository
             $data['name'],
             (int)$data['price'],
             $data['type'],
-            json_decode($data['atributesJson'])
+            $data['atributeName'],
+            $data['atributeValue']
         );
         return $product;
     }
@@ -150,7 +156,8 @@ class MySqlRepository
             $products->addColumn('name', 'string', ['length' => 255]);
             $products->addColumn('price', 'integer');
             $products->addColumn('type', 'string', ['length' => 255]);
-            $products->addColumn('atributesJson', 'json');
+            $products->addColumn('atributeName', 'string', ['length' => 255]);
+            $products->addColumn('atributeValue', 'string', ['length' => 255]);
             $schema->createTable($products);
         } catch (Exception $e) {
             \App\Helper::dump($e->getMessage());

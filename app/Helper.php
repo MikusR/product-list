@@ -45,23 +45,25 @@ class Helper
 
     public function seedTable()
     {
-        $this->repository->save(new Product('123', 'matrix', 100, 'DVD', [['name' => 'color', 'value' => 'red']]));
         $this->repository->save(
-            new Product('456', 'war in peaces', 200, 'Book', [['name' => 'color', 'value' => 'blue']])
+            new Product(
+                '123', 'matrix', 100, 'DVD', 'size', '10mb'
+            )
+        );
+        
+        $this->repository->save(
+            new Product(
+                '456', 'war in peaces', 200, 'Book', 'color', 'red'
+            )
         );
         $this->repository->save(
             new Product(
-                '789', 'shelf', 300, 'Furniture',
-                [
-                    ['name' => 'weight', 'value' => '10kg'],
-                    ['name' => 'height', 'value' => '10cm']
-                ]
+                '789', 'shelf', 300, 'Furniture', 'dimensions', '10x20x10'
             )
         );
-        $this->repository->save(new Product('012', 'table', 400, 'Furniture', [
-            ['name' => 'weight', 'value' => '20kg'],
-            ['name' => 'height', 'value' => '20cm']
-        ]));
+        $this->repository->save(
+            new Product('012', 'table', 400, 'Furniture', 'dimensions', '10x10x10')
+        );
     }
 
     public function migrate(): Response

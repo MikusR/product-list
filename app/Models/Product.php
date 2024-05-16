@@ -10,15 +10,13 @@ class Product
     private string $name;
     private int $price;
     private string $type;
-    private array $atribute;
 
-    public function __construct(string $sku, string $name, int $price, string $type, array $atribute)
+    public function __construct(array $data = [])
     {
-        $this->setSku($sku);
-        $this->setName($name);
-        $this->setPrice($price);
-        $this->setType($type);
-        $this->setAtribute($atribute);
+        $this->setSku($data['sku']);
+        $this->setName($data['name']);
+        $this->setPrice($data['price']);
+        $this->setType($data['type']);
     }
 
     public function getSku(): string
@@ -61,13 +59,5 @@ class Product
         $this->type = $type;
     }
 
-    public function getAtribute(): array
-    {
-        return $this->atribute;
-    }
 
-    public function setAtribute(array $atribute): void
-    {
-        $this->atribute = $atribute;
-    }
 }

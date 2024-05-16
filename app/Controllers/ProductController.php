@@ -38,21 +38,20 @@ class ProductController
 
     public function store(): Response
     {
-//        $atributes = [
-//            ['productType' => $_POST['productType']],
-//            ['name' => 'size', 'value' => $_POST['size']],
-//            ['name' => 'weight', 'value' => $_POST['weight']],
-//            ['name' => 'height', 'value' => $_POST['height']],
-//            ['name' => 'width', 'value' => $_POST['width']],
-//            ['name' => 'length', 'value' => $_POST['length']]
-//        ];
+        $atributes = [
+            ['name' => 'size', 'value' => $_POST['size']],
+            ['name' => 'weight', 'value' => $_POST['weight']],
+            ['name' => 'height', 'value' => $_POST['height']],
+            ['name' => 'width', 'value' => $_POST['width']],
+            ['name' => 'length', 'value' => $_POST['length']]
+        ];
 //
 //            $_POST['sku'],
 //            $_POST['name'],
 //            (int)$_POST['price'],
 //            $_POST['productType'],
 //            $atributes
-        
+
         $product = new Product();
         $this->repository->save($product);
         return new RedirectResponse('/');
