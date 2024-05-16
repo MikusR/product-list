@@ -2,40 +2,26 @@
 
 declare(strict_types=1);
 
-namespace App;
-
+use App\Configuration;
 use App\Repositories\MySqlRepository;
 
-class Helper
+require_once __DIR__.'/vendor/autoload.php';
+
+class Migrate
 {
     private MySqlRepository $repository;
 
     public function __construct()
     {
+        $config = new Configuration();
+        $config->prepareSecrets();
         $this->repository = new MySqlRepository();
     }
 
-    public static function info()
+    public function migrate()
     {
-        echo "<pre>";
-        echo phpinfo();
-    }
-
-    public static function dd($value)
-    {
-        echo '<pre>';
-        var_dump($value);
-        die;
-    }
-
-    public static function dump($value)
-    {
-        echo '<pre>';
-        var_dump($value);
-    }
-
-    public static function test()
-    {
+        $this->repository->createTable();
+        $this->seedTable();
     }
 
     public function seedTable()
@@ -88,14 +74,7 @@ class Helper
         $this->repository->save($model);
     }
 
-    public function migrate(): Response
-    {
-        $this->repository->createTable();
-        $this->seedTable();
-        return new RedirectResponse('/');
-    }
 }
 
-//foreach ($argv as $arg) {
-//    method_exists(Helper::class, $arg) and call_user_func([Helper::class, $arg]);
-//}
+$migration = new Migrate();
+$migration->migrate();

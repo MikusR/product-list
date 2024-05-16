@@ -44,10 +44,10 @@ create database
 mysql> CREATE DATABASE swjd;
 ```
 
-run locally with
+run migration (creates table and adds sample data)
 
 ```bash
-php -S localhost:9876 -t ./public
+php ./Migrate.php
 ```
 
 or using apache (example apacheconf)
