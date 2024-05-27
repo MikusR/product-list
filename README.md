@@ -50,6 +50,12 @@ run migration (creates table and adds sample data)
 php ./Migrate.php
 ```
 
+run locally
+
+```bash
+php -S localhost:9876 -t ./public
+```
+
 or using apache (example apacheconf)
 
 ```apacheconf
@@ -68,13 +74,6 @@ or using apache (example apacheconf)
      CustomLog ${APACHE_LOG_DIR}/sjdtt.mikusr.info_access.log combined
 </VirtualHost>
 ```
-
-on first visit it is necessary to visit yourserver/migrate to create table and add sample data
-
-```
-localhost:9876/migrate
-```
-
 ## Functionality
 
 ### Delete
