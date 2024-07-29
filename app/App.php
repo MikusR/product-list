@@ -15,7 +15,7 @@ class App
     {
         session_start();
 
-        if (!isset($_SESSION['csrf_token'])) {
+        if ( ! isset($_SESSION['csrf_token'])) {
             $_SESSION['csrf_token'] = md5(uniqid(random_bytes(3), true));
         }
 
@@ -23,7 +23,7 @@ class App
         $config->prepareSecrets();
 
         $loader = new FilesystemLoader(dirname(__DIR__).'/resources/views/');
-        $twig = new Environment($loader);
+        $twig   = new Environment($loader);
 
         $twig->addGlobal('csrf_token', $_SESSION['csrf_token']);
 
@@ -31,12 +31,13 @@ class App
             $r->addRoute('GET', '/', [ProductController::class, 'index']);
             $r->addRoute('GET', '/add-product', [ProductController::class, 'create']);
             $r->addRoute('POST', '/product', [ProductController::class, 'store']);
+            $r->addRoute('POST', '/search', [ProductController::class, 'search']);
             $r->addRoute('DELETE', '/delete', [ProductController::class, 'delete']);
         });
 
         // Fetch method and URI from somewhere
         $httpMethod = $_SERVER['REQUEST_METHOD'];
-        $uri = $_SERVER['REQUEST_URI'];
+        $uri        = $_SERVER['REQUEST_URI'];
 
         // Strip query string (?foo=bar) and decode URI
         if (false !== $pos = strpos($uri, '?')) {
@@ -59,7 +60,7 @@ class App
             case FastRoute\Dispatcher::FOUND:
 
                 $handler = $routeInfo[1];
-                $vars = $routeInfo[2];
+                $vars    = $routeInfo[2];
                 //split handler into controller and method
                 [$controller, $method] = $handler;
 

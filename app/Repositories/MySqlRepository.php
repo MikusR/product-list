@@ -20,12 +20,12 @@ class MySqlRepository
     public function __construct()
     {
         $connectionParams = [
-            'dbname' => $_ENV['DBNAME'],
-            'user' => $_ENV['DBUSER'],
-            'password' => $_ENV['PASSWORD'],
-            'host' => $_ENV['HOST'],
-            'driver' => $_ENV['DRIVER'],
-            'port' => (int)$_ENV['PORT'],
+            'dbname'        => $_ENV['DBNAME'],
+            'user'          => $_ENV['DBUSER'],
+            'password'      => $_ENV['PASSWORD'],
+            'host'          => $_ENV['HOST'],
+            'driver'        => $_ENV['DRIVER'],
+            'port'          => (int)$_ENV['PORT'],
             'driverOptions' =>
                 [PDO::ATTR_EMULATE_PREPARES => false]
         ];
@@ -35,8 +35,8 @@ class MySqlRepository
             $this->database->connect();
         } catch (Exception $e) {
             $_SESSION['error'] = [
-                'status' => true,
-                'message' => "Can't connect to database",
+                'status'      => true,
+                'message'     => "Can't connect to database",
                 'description' => $e->getMessage()
             ];
         }
@@ -46,10 +46,10 @@ class MySqlRepository
     {
         try {
             $productsList = $this->database->createQueryBuilder()
-                ->select('*')
-                ->from('products')
-                ->orderBy('sku')
-                ->fetchAllAssociative();
+                                           ->select('*')
+                                           ->from('products')
+                                           ->orderBy('sku')
+                                           ->fetchAllAssociative();
         } catch (Exception $e) {
             $productsList = [];
             echo $e->getMessage();
@@ -58,6 +58,7 @@ class MySqlRepository
         foreach ($productsList as $product) {
             $products->add($this->buildModel($product));
         }
+
         return $products;
     }
 
@@ -65,40 +66,72 @@ class MySqlRepository
     {
         try {
             $product = $this->database->createQueryBuilder()
-                ->select('*')
-                ->from('products')
-                ->where('sku = :sku')
-                ->setParameter('sku', $sku)
-                ->fetchAssociative();
+                                      ->select('*')
+                                      ->from('products')
+                                      ->where('sku = :sku')
+                                      ->setParameter('sku', $sku)
+                                      ->fetchAssociative();
         } catch (Exception $e) {
             return null;
         }
-        if (!$product) {
+        if ( ! $product) {
             return null;
         }
+
         return $this->buildModel($product);
+    }
+
+    public function search(string $product): ?ProductCollection
+    {
+        $builder  = $this->database->createQueryBuilder();
+        $products = $builder->select('*')
+                            ->from('products')
+                            ->where(
+                                $builder->expr()->or(
+                                    $builder->expr()->like('sku', ':product'),
+                                    $builder->expr()->like('name', ':product')
+                                )
+                            )
+                            ->setParameter('product', $product)
+                            ->fetchAllAssociative();
+        if (count($products) === 0) {
+            return null;
+        }
+
+        return new ProductCollection($products);
     }
 
     public function save(Product $product): void
     {
-        $builder = $this->database->createQueryBuilder();
         try {
+            $builder = $this->database->createQueryBuilder();
+            if ($product->getSku()) {
+                $builder->update('products')
+                        ->where('sku = :sku')
+                        ->set('name', ':name')
+                        ->set('price', ':price')
+                        ->setParameters([
+                            'name'  => $product->getName(),
+                            'price' => $product->getPrice()
+                        ])
+                        ->executeQuery();
+            }
             $builder
                 ->insert('products')
                 ->values([
-                    'sku' => ':sku',
-                    'name' => ':name',
-                    'price' => ':price',
-                    'type' => ':type',
-                    'attributename' => ':attributename',
+                    'sku'            => ':sku',
+                    'name'           => ':name',
+                    'price'          => ':price',
+                    'type'           => ':type',
+                    'attributename'  => ':attributename',
                     'attributevalue' => ':attributevalue'
                 ])
                 ->setParameters([
-                    'sku' => $product->getSku(),
-                    'name' => $product->getName(),
-                    'price' => $product->getPrice(),
-                    'type' => $product->getType(),
-                    'attributename' => $product->getAttributeName(),
+                    'sku'            => $product->getSku(),
+                    'name'           => $product->getName(),
+                    'price'          => $product->getPrice(),
+                    'type'           => $product->getType(),
+                    'attributename'  => $product->getAttributeName(),
                     'attributevalue' => $product->getAttributeValue()
                 ])
                 ->executeQuery();
@@ -109,11 +142,11 @@ class MySqlRepository
 
     public function delete(Product $product): void
     {
-        $sku = $product->getSku();
+        $sku     = $product->getSku();
         $builder = $this->database->createQueryBuilder()
-            ->delete('products')
-            ->where('sku = :sku')
-            ->setParameter('sku', $sku);
+                                  ->delete('products')
+                                  ->where('sku = :sku')
+                                  ->setParameter('sku', $sku);
         try {
             $builder->executeQuery();
         } catch (Exception $e) {

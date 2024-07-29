@@ -32,21 +32,22 @@ class ProductController
     public function create(): response
     {
         $types = $this->getProductTypes();
+
         return new ViewResponse('addProduct', ['types' => $types]);
     }
 
     public function store(): Response
     {
         $errors = [];
-        $data = [
-            'sku' => $_POST['sku'],
-            'name' => $_POST['name'],
-            'price' => (int)$_POST['price'],
-            'type' => $_POST['productType'],
-            'size' => $_POST['size'],
+        $data   = [
+            'sku'    => $_POST['sku'],
+            'name'   => $_POST['name'],
+            'price'  => (int)$_POST['price'],
+            'type'   => $_POST['productType'],
+            'size'   => $_POST['size'],
             'weight' => $_POST['weight'],
             'height' => $_POST['height'],
-            'width' => $_POST['width'],
+            'width'  => $_POST['width'],
             'length' => $_POST['length']
         ];
         $errors = $this->validate($data);
@@ -56,6 +57,7 @@ class ProductController
                 $product = new $type($data);
                 $this->repository->save($product);
             }
+
             return new RedirectResponse('/');
         }
 
@@ -63,6 +65,20 @@ class ProductController
             'addProduct',
             ['types' => $this->getProductTypes(), 'errors' => $errors, 'data' => $data]
         );
+    }
+
+    public function search(): Response
+    {
+        $product = $_POST['product'];
+        if ($product = '*') {
+            return new ViewResponse('index', ['products' => $this->repository->getAll()->getProducts()]);
+        }
+        $products = $this->repository->search($product);
+        if ($products === null) {
+            return new ViewResponse('index', ['products' => []]);
+        }
+
+        return new ViewResponse('index', ['products' => $products->getProducts()]);
     }
 
     public function delete(): Response
@@ -74,7 +90,7 @@ class ProductController
 
         foreach ($list as $sku) {
             $product = $this->repository->getProduct($sku);
-            if (!$product) {
+            if ( ! $product) {
                 continue;
             }
             $this->repository->delete($product);
@@ -86,25 +102,26 @@ class ProductController
     public function getProductTypes(): array
     {
         $types = [
-            'DVD' => [
-                'name' => 'DVD',
-                'attributes' => ['size'],
+            'DVD'       => [
+                'name'        => 'DVD',
+                'attributes'  => ['size'],
                 'description' => 'Please, provide size',
-                'unit' => 'MB'
+                'unit'        => 'MB'
             ],
-            'Book' => [
-                'name' => 'Book',
-                'attributes' => ['weight'],
+            'Book'      => [
+                'name'        => 'Book',
+                'attributes'  => ['weight'],
                 'description' => 'Please, provide weight',
-                'unit' => 'Kg'
+                'unit'        => 'Kg'
             ],
             'Furniture' => [
-                'name' => 'Furniture',
-                'attributes' => ['height', 'width', 'length'],
+                'name'        => 'Furniture',
+                'attributes'  => ['height', 'width', 'length'],
                 'description' => 'Please, provide dimensions',
-                'unit' => 'cm'
+                'unit'        => 'cm'
             ]
         ];
+
         return $types;
     }
 
@@ -135,6 +152,7 @@ class ProductController
         if ($data['length'] != '' && $data['length'] <= 0) {
             $errors['length'] = 'Length must be greater than 0';
         }
+
         return $errors;
     }
 }
