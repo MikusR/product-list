@@ -18,7 +18,8 @@
     "vlucas/phpdotenv": "^5.6",
     "doctrine/dbal": "^3.8",
     "ext-json": "*",
-    "ext-pdo": "*"
+    "ext-pdo": "*",
+    "webonyx/graphql-php": "^15.12"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.10"
