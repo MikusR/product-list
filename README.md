@@ -1,6 +1,5 @@
 # Product list
 
-[Test instance](https://sjdtt.mikusr.info/)
 
 Application for listing products
 
